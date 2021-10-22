@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Basic Example/Basic Glimesh.gd" type="Script" id=1]
+
+[node name="Test" type="Node"]
+script = ExtResource( 1 )
+data = "query{user(username: \"DairyFreeLemon\"){username, id}}"
+key = "res://Web Socket/key"
+channel_request = "query {  channel(streamerUsername: \"DairyFreeLemon\") {    id  }}"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Button" type="Button" parent="."]
+margin_right = 252.0
+margin_bottom = 83.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]

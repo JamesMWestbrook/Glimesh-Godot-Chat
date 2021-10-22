@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://npc_manager.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Sprites/NPC/NPC.tscn" type="PackedScene" id=2]
+
+[node name="npc_manager" type="Node2D"]
+script = ExtResource( 1 )
+npc_scene = ExtResource( 2 )
+spawns = [ NodePath("spawn1"), NodePath("spawn2") ]
+
+[node name="Control" type="Control" parent="."]
+margin_left = 554.17
+margin_top = 278.274
+margin_right = 594.17
+margin_bottom = 318.274
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spawn1" type="Control" parent="."]
+margin_left = 263.676
+margin_top = 278.274
+margin_right = 303.676
+margin_bottom = 318.274
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spawn2" type="Control" parent="."]
+margin_left = 714.497
+margin_top = 278.274
+margin_right = 754.497
+margin_bottom = 318.274
