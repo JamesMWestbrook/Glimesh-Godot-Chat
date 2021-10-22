@@ -20,7 +20,7 @@ WebSocket="*res://Web Socket/WebSocket.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 

@@ -2,7 +2,8 @@ extends Node
 
 # The URL we will connect to
 var socket_start = "wss://glimesh.tv/api/socket/websocket?vsn=2.0.0&client_id="
-export(String, FILE) var key 
+#export(String, FILE) var key 
+export(String) var key 
 var key_value
 var websocket_url
 # Our WebSocketClient instance
@@ -23,7 +24,7 @@ var heartbeat = ["1","1","phoenix","heartbeat",{}]
 
 
 func _ready():
-	websocket_url = socket_start + _load()
+	websocket_url = socket_start + key
 	# Connect base signals to get notified of connection open, close, and errors.
 	_client.connect("connection_closed", self, "_closed")
 	_client.connect("connection_error", self, "_closed")
@@ -119,6 +120,7 @@ func _load():
 	var content = file.get_as_text()
 	file.close()
 	key_value = content
+	#return "8e0ab048-7af0-43a1-99ed-899726e8dd98"
 	return content
 
 func _heart_beat_send():
