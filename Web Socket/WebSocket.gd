@@ -19,11 +19,12 @@ var request = ["1","1","__absinthe__:control","phx_join",{}]
 var sub_string_pre = "subscription{ chatMessage(channelId: "
 var sub_string_su = ") { user { username avatar avatarURL } message } }"
 
+#used to get username, avatar, avatar URL, and message from each viewer message
 var join_chat_query = ["1",
 	"1",
 	"__absinthe__:control",
 	"doc",
-	{"query":"subscription{ chatMessage(channelId: 16414) { user { username avatar avatarURL } message } }",
+	{"query":"subscription{ chatMessage(channelId: bitch) { user { username avatar avatarURL } message } }",
 	"variables":{} }]
 var heartbeat = ["1","1","phoenix","heartbeat",{}]
 
@@ -68,6 +69,8 @@ func _connected(proto = ""):
 	yield(_client,"data_received")
 	var full_string = sub_string_pre + channel_id + sub_string_su
 	join_chat_query[4].query = full_string
+	
+	join_chat_query[4].query = join_chat_query[4].query.replace("bitch", String(channel_id))
 	packet = _make_packet(join_chat_query)
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	_client.get_peer(1).put_packet(packet)
@@ -93,12 +96,6 @@ func _on_data():
 		print("'",chat_message.message,"'", " from: ", chat_message.user.username)
 		emit_signal("chat_signal", chat_message)
 		_check_message(chat_message)
-		#print("")
-		#var dir = Directory.new()
-		#if !dir.file_exists("user://avatars/" + chat_message.user.username + ".png"):
-		#	$HTTPRequest._get_thing("avatar",chat_message.user.username,chat_message.user.avatarURL)
-		#else:
-		#	ChatRoom._update_avatars()
 		
 		
 		
