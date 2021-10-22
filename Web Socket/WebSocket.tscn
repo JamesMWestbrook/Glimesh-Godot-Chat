@@ -5,7 +5,8 @@
 
 [node name="WebSocket" type="Node"]
 script = ExtResource( 1 )
-key = "put client id here"
+client_id = "da038205-9449-41ed-b8d6-3700e1dff45d"
+channel_id = "3052"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 script = ExtResource( 2 )

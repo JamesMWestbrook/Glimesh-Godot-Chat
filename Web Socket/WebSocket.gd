@@ -2,9 +2,9 @@ extends Node
 
 # The URL we will connect to
 var socket_start = "wss://glimesh.tv/api/socket/websocket?vsn=2.0.0&client_id="
-#export(String, FILE) var key 
-export(String) var key 
-var key_value
+#export(String, FILE) var client_id
+export(String) var client_id
+export(String) var channel_id
 var websocket_url
 # Our WebSocketClient instance
 var _client = WebSocketClient.new()
@@ -15,16 +15,24 @@ signal color_npc(user, color)
 
 
 var request = ["1","1","__absinthe__:control","phx_join",{}]
-var join_chat_query = ["1","1",
-	"__absinthe__:control","doc",
+
+var sub_string_pre = "subscription{ chatMessage(channelId: "
+var sub_string_su = ") { user { username avatar avatarURL } message } }"
+
+var join_chat_query = ["1",
+	"1",
+	"__absinthe__:control",
+	"doc",
 	{"query":"subscription{ chatMessage(channelId: 16414) { user { username avatar avatarURL } message } }",
 	"variables":{} }]
 var heartbeat = ["1","1","phoenix","heartbeat",{}]
 
-
+export(bool) var active = true
 
 func _ready():
-	websocket_url = socket_start + key
+	if !active:
+		return
+	websocket_url = socket_start + client_id
 	# Connect base signals to get notified of connection open, close, and errors.
 	_client.connect("connection_closed", self, "_closed")
 	_client.connect("connection_error", self, "_closed")
@@ -58,6 +66,8 @@ func _connected(proto = ""):
 	_client.get_peer(1).put_packet(packet)
 	
 	yield(_client,"data_received")
+	var full_string = sub_string_pre + channel_id + sub_string_su
+	join_chat_query[4].query = full_string
 	packet = _make_packet(join_chat_query)
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	_client.get_peer(1).put_packet(packet)
@@ -114,14 +124,6 @@ func _process(delta):
 		timer = 0
 		_heart_beat_send()
 
-func _load():
-	var file = File.new()
-	file.open(key, File.READ)
-	var content = file.get_as_text()
-	file.close()
-	key_value = content
-	#return "8e0ab048-7af0-43a1-99ed-899726e8dd98"
-	return content
 
 func _heart_beat_send():
 	var packet = _make_packet(heartbeat)

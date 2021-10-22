@@ -15,7 +15,7 @@ func _ready():
 
 func _get_thing(type, user, arg):
 	username = user
-	key_value = WebSocket.key_value
+	key_value = WebSocket.client_id
 	header = [header_start + key_value]
 	match (type):
 		"avatar":
